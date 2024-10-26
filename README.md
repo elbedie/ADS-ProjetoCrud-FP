@@ -15,5 +15,5 @@
 - **Python 3.x**
 - **Bibliotecas: json, os, time**
 
-##📝 Contribuições
+## 📝 Contribuições
 Sinta-se à vontade para contribuir! Faça um fork deste repositório, crie sua feature e envie um Pull Request.
