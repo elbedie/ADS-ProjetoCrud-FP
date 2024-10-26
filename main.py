@@ -6,7 +6,7 @@ arquivoEmpresas = "empresas.json"
 arquivoEstudantes = "estudantes.json"
 arquivoVagas = "vagas.json"
 
-# --------------------------------------- FUNÇÕES: GLOBAL ------------------------------------------
+# --------------------------------------- FUNÇÕES GLOBAIS ------------------------------------------
 
 def limpar_console():
     os.system('cls' if os.name == 'nt' else 'clear')
