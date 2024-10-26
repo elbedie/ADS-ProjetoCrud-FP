@@ -117,7 +117,7 @@ def DeletarNoJson(caminhoDoArquivo, indice):
         print("Arquivo não encontrado.")
 
    
-# --------------------------------------- MENU PRINCIPAL --------------------------------------------------
+# --------------------------------------- !MENU PRINCIPAL! --------------------------------------------------
     
 def MenuPrincipal():
     limpar_console()
@@ -143,7 +143,7 @@ def MenuPrincipal():
         case _:
             print("Opção inválida. Sistema encerrado.")
 
-# --------------------------------------- FUNÇÕES SISTEMA EMPRESA ------------------------------------------
+# --------------------------------------- !FUNÇÕES DO SISTEMA EMPRESA! ------------------------------------------
 def SistemaEmpresas():
     while True:
         limpar_console()
@@ -221,6 +221,6 @@ def SistemaEmpresas():
 
 
 
-# --------------------------------------- MAIN ------------------------------------------
+# --------------------------------------- !MAIN! ------------------------------------------
 
 MenuPrincipal()
