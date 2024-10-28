@@ -226,43 +226,27 @@ def obter_proximo_id_vaga():
             except json.JSONDecodeError:
                 vagas = []
         if vagas:
-            ultimo_id = max(vaga['vagaId'] for vaga in vagas)
+            ultimo_id = max(vaga['Id'] for vaga in vagas)
             return ultimo_id + 1
     return 1
-
-# Validando ID
-def empresa_existe(id_empresa):
-    if os.path.exists(arquivoEmpresas):
-        with open(arquivoEmpresas, 'r') as arquivo:
-            try:
-                empresas = json.load(arquivo)
-            except json.JSONDecodeError:
-                empresas = []
-        return any(empresa.get('empresaId') == id_empresa for empresa in empresas)
-    return False
-
 
 def cadastrar_vaga():
     limpar_console()
     print("Cadastro de Vaga")
     
-    vagaEmpresaId = int(input("Digite o ID da empresa: "))
-    if not empresa_existe(vagaEmpresaId):
-        print("ID de empresa não encontrado.")
-        return
+    # exibir ID da empresa em construção
     
     vaga = {
-        "vagaId": obter_proximo_id_vaga(),
-        "vagaEmpresaId": vagaEmpresaId,
-        "vagaFunção": input("Função: "),
-        "vagaCurso": input("Curso: "),
-        "vagaPeríodoMínimo": int(input("Período mínimo: ")),
-        "vagaTurno": input("Turno (matutino/vespertino/noturno): "),
-        "vagaBolsa": float(input("Bolsa: ")),
-        "vagaAuxílioTransporte": input("Auxílio Transporte (sim/não): "),
-        "vagaIdadeMinima": int(input("Idade mínima: ")),
-        "vagaStatus": "aberta",
-        "vagaPrazo": input("Prazo para candidatura (DD/MM/AAAA): ")
+        "Id": obter_proximo_id_vaga(),
+        "Funcao": input("Função: "),
+        "Curso": input("Curso: "),
+        "Periodo Minimo": int(input("Período mínimo: ")),
+        "Turno": input("Turno (matutino/vespertino/noturno): "),
+        "Bolsa": float(input("Bolsa: ")),
+        "Auxilio Transporte": input("Auxílio Transporte (sim/não): "),
+        "Idade Minima": int(input("Idade mínima: ")),
+        "Status": "aberta",
+        "Prazo": input("Prazo para candidatura (DD/MM/AAAA): ")
     }
 
     CadastrarNoJson(arquivoVagas, vaga)
@@ -271,92 +255,41 @@ def cadastrar_vaga():
 def visualizar_vagas():
     limpar_console()
     print("Visualização de Vagas")
-    
-    curso_filtro = input("Filtrar por curso (ou deixe em branco): ")
-    periodo_minimo_filtro = input("Filtrar por período mínimo (ou deixe em branco): ")
-    periodo_minimo_filtro = int(periodo_minimo_filtro) if periodo_minimo_filtro else None
-    
-    if os.path.exists(arquivoVagas):
-        with open(arquivoVagas, 'r') as arquivo:
-            try:
-                vagas = json.load(arquivo)
-            except json.JSONDecodeError:
-                vagas = []
-        
-        for vaga in vagas:
-            if (curso_filtro and vaga['vagaCurso'] != curso_filtro) or \
-               (periodo_minimo_filtro and vaga['vagaPeríodoMínimo'] < periodo_minimo_filtro):
-                continue
-            
-            print("\n*******************************")
-            print(f"ID da Vaga: {vaga['vagaId']}")
-            print(f"Empresa ID: {vaga['vagaEmpresaId']}")
-            print(f"Função: {vaga['vagaFunção']}")
-            print(f"Curso: {vaga['vagaCurso']}")
-            print(f"Período Mínimo: {vaga['vagaPeríodoMínimo']}")
-            print(f"Turno: {vaga['vagaTurno']}")
-            print(f"Bolsa: R$ {vaga['vagaBolsa']}")
-            print(f"Auxílio Transporte: {vaga['vagaAuxílioTransporte']}")
-            print(f"Idade Mínima: {vaga['vagaIdadeMinima']}")
-            print(f"Status: {vaga['vagaStatus']}")
-            print(f"Prazo para Candidatura: {vaga['vagaPrazo']}")
-            print("*******************************")
-    else:
-        print("Nenhuma vaga encontrada.")
+    VisualizarJson(arquivoVagas)
 
 def atualizar_vaga():
     limpar_console()
     visualizar_vagas()
-    vagaId = int(input("Digite o ID da vaga que deseja atualizar: "))
+    indice = int(input("Digite o índice da vaga que deseja atualizar: "))
+    nova_funcao = input("Digite a nova função (ou deixe em branco para manter a atual): ")
+    novo_curso = input("Digite o novo curso relacionado (ou deixe em branco para manter o atual): ")
+    novo_periodo_minimo = input("Digite o novo período mínimo (ou deixe em branco para manter o atual): ")
+    novo_turno = input("Digite o novo turno (ou deixe em branco para manter o atual): ")
+    nova_bolsa = input("Digite o valor da nova bolsa (ou deixe em branco para manter o atual): ")
+    novo_auxilio_transporte = input("A vaga oferece auxílio transporte? (Sim/Não ou deixe em branco para manter o atual): ")
+    nova_idade_minima = input("Digite a nova idade mínima (ou deixe em branco para manter o atual): ")
+    novo_status = input("Digite o novo status da vaga (ou deixe em branco para manter o atual): ")
+    novo_prazo = input("Digite o novo prazo para candidatura (ou deixe em branco para manter o atual): ")
 
-    if os.path.exists(arquivoVagas):
-        with open(arquivoVagas, 'r') as arquivo:
-            try:
-                vagas = json.load(arquivo)
-            except json.JSONDecodeError:
-                vagas = []
-        
-        vaga = next((v for v in vagas if v['vagaId'] == vagaId), None)
-        if vaga:
-            vaga['vagaFunção'] = input(f"Função ({vaga['vagaFunção']}): ") or vaga['vagaFunção']
-            vaga['vagaCurso'] = input(f"Curso ({vaga['vagaCurso']}): ") or vaga['vagaCurso']
-            vaga['vagaPeríodoMínimo'] = int(input(f"Período Mínimo ({vaga['vagaPeríodoMínimo']}): ") or vaga['vagaPeríodoMínimo'])
-            vaga['vagaTurno'] = input(f"Turno ({vaga['vagaTurno']}): ") or vaga['vagaTurno']
-            vaga['vagaBolsa'] = float(input(f"Bolsa ({vaga['vagaBolsa']}): ") or vaga['vagaBolsa'])
-            vaga['vagaAuxílioTransporte'] = input(f"Auxílio Transporte ({vaga['vagaAuxílioTransporte']}): ") or vaga['vagaAuxílioTransporte']
-            vaga['vagaIdadeMinima'] = int(input(f"Idade Mínima ({vaga['vagaIdadeMinima']}): ") or vaga['vagaIdadeMinima'])
-            vaga['vagaStatus'] = input(f"Status ({vaga['vagaStatus']} - aberta/fechada): ") or vaga['vagaStatus']
-            vaga['vagaPrazo'] = input(f"Prazo para Candidatura ({vaga['vagaPrazo']}): ") or vaga['vagaPrazo']
-
-            with open(arquivoVagas, 'w') as arquivo:
-                json.dump(vagas, arquivo, indent=4, ensure_ascii=False)
-
-            print("Vaga atualizada com sucesso.")
-        else:
-            print("Vaga não encontrada.")
-    else:
-        print("Nenhuma vaga encontrada.")
+    novosDados = {
+        "Funcao": nova_funcao,
+        "Curso": novo_curso,
+        "Periodo Minimo": novo_periodo_minimo,
+        "Turno": novo_turno,
+        "Bolsa": nova_bolsa,
+        "Auxilio Transporte": novo_auxilio_transporte,
+        "Idade Minima": nova_idade_minima,
+        "Status": novo_status,
+        "Prazo": novo_prazo
+    }
+    AtualizarJson(arquivoVagas, indice, novosDados)
 
 def deletar_vaga():
     limpar_console()
     visualizar_vagas()
-    vagaId = int(input("Digite o ID da vaga que deseja deletar: "))
+    id = int(input("Digite o ID da vaga que deseja deletar: "))
 
-    if os.path.exists(arquivoVagas):
-        with open(arquivoVagas, 'r') as arquivo:
-            try:
-                vagas = json.load(arquivo)
-            except json.JSONDecodeError:
-                vagas = []
-        
-        vagas = [vaga for vaga in vagas if vaga['vagaId'] != vagaId]
-
-        with open(arquivoVagas, 'w') as arquivo:
-            json.dump(vagas, arquivo, indent=4, ensure_ascii=False)
-
-        print("Vaga deletada com sucesso.")
-    else:
-        print("Nenhuma vaga encontrada.")
+    DeletarNoJson(arquivoVagas, id)
 
 def sistema_vagas():
     while True:
@@ -383,7 +316,7 @@ def sistema_vagas():
             case 4:
                 deletar_vaga()
             case 5:
-                break
+                MenuPrincipal(0)
             case 0:
                 print("Finalizando o programa!")
                 return False
@@ -423,8 +356,5 @@ def MenuPrincipal():
 # --------------------------------------- !MAIN! ------------------------------------------
 
 if __name__ == "__main__":
-    while True:
-        MenuPrincipal()
-        if input("Deseja sair do sistema? (s/n): ").lower() == 's':
-            print("Encerrando o programa... Até mais!")
-            break
+    MenuPrincipal()
+

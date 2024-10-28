@@ -1,15 +1,14 @@
 [
     {
-        "vagaId": 1,
-        "vagaEmpresaId": 1,
-        "vagaFunção": "Gestão de Projetos",
-        "vagaCurso": "Engenharia Biomédica",
-        "vagaPeríodoMínimo": 6,
-        "vagaTurno": "noturno",
-        "vagaBolsa": 1.2,
-        "vagaAuxílioTransporte": "sim",
-        "vagaIdadeMinima": 18,
-        "vagaStatus": "aberta",
-        "vagaPrazo": "11/11/2024"
+        "Id": 1,
+        "Funcao": "Estagiario",
+        "Curso": "Letras",
+        "Periodo Minimo": 2,
+        "Turno": "Noturno",
+        "Bolsa": 1200.0,
+        "Auxilio Transporte": "Sim",
+        "Idade Minima": 19,
+        "Status": "aberta",
+        "Prazo": "30/03/2025"
     }
 ]
