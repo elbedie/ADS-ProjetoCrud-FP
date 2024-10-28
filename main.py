@@ -64,6 +64,7 @@ def VisualizarJson(caminhoDoArquivo):
     else:
         print("Arquivo não encontrado.")
 
+
 def AtualizarJson(caminhoDoArquivo, indice, novosDados):
     if os.path.exists(caminhoDoArquivo):
         with open(caminhoDoArquivo, 'r') as arquivo:
@@ -129,11 +130,46 @@ def obter_proximo_id_empresa():
             except json.JSONDecodeError:
                 empresas = []
         if empresas:
-            ultimo_id = max(empresa.get('empresaId', 0) for empresa in empresas)
+            ultimo_id = max(empresa.get('Id', 0) for empresa in empresas)
             return ultimo_id + 1
     return 1
 
-# Função de cadastro de empresas com ID automático
+def VisualizarJsonEmpresas(caminhoDoArquivo):
+    if os.path.exists(caminhoDoArquivo):
+        with open(caminhoDoArquivo, 'r') as arquivo:
+            try:
+                dicionariosModelos = json.load(arquivo)
+            except json.JSONDecodeError:
+                dicionariosModelos = []
+        
+        if dicionariosModelos:
+            # Exibir IDs disponíveis
+            print("IDs disponíveis:")
+            for dicionario in dicionariosModelos:
+                if 'Id' in dicionario:
+                    print(f"ID: {dicionario['Id']} | Empresa: {dicionario['Nome']}")
+
+            # Solicitar ao usuário o ID da empresa
+            id_escolhido = input("Digite o ID da empresa que deseja ver os detalhes: ")
+
+            # Encontrar e exibir os detalhes do registro correspondente ao ID escolhido
+            for dicionario in dicionariosModelos:
+                if 'Id' in dicionario and str(dicionario['Id']) == id_escolhido:
+                    print(f"\nDetalhes da empresa com ID {id_escolhido}:")
+                    print("*******************************")
+                    for chave, valor in dicionario.items():
+                        print(f"{chave.capitalize()}: {valor}")
+                    print("*******************************")
+                    return True
+            
+            print("ID não encontrado.")
+            return False
+        else:
+            print("Nenhum registro encontrado.")
+            return False
+    else:
+        print("Arquivo não encontrado.")
+
 def SistemaEmpresas():
     while True:
         limpar_console()
@@ -161,7 +197,7 @@ def SistemaEmpresas():
                 
                 # Gera o próximo ID automaticamente
                 empresa = {
-                    "empresaId": obter_proximo_id_empresa(),
+                    "Id": obter_proximo_id_empresa(),
                     "Nome": empresaNome,
                     "Area": empresaArea,
                     "Email": empresaEmail,
@@ -174,7 +210,7 @@ def SistemaEmpresas():
                 CadastrarNoJson(arquivoEmpresas, empresa)
                 print("Empresa cadastrada com sucesso!")
             case 2:
-                VisualizarJson(arquivoEmpresas)
+                VisualizarJsonEmpresas(arquivoEmpresas)
             case 3:
                 limpar_console()
                 if VisualizarJson(arquivoEmpresas):  
@@ -201,7 +237,7 @@ def SistemaEmpresas():
                 indice = int(input("Digite o índice da Empresa que deseja excluir: "))
                 DeletarNoJson(arquivoEmpresas, indice)
             case 5:
-                break
+                MenuPrincipal()
             case 0:
                 print("Finalizando o programa!")
                 return False
@@ -237,7 +273,7 @@ def cadastrar_vaga():
     # exibir ID da empresa em construção
     
     vaga = {
-        "Id": obter_proximo_id_vaga(),
+        "IdEmpresa": input("Id da Empresa: "),
         "Funcao": input("Função: "),
         "Curso": input("Curso: "),
         "Periodo Minimo": int(input("Período mínimo: ")),

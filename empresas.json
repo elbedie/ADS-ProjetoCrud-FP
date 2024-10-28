@@ -1,6 +1,6 @@
 [
     {
-        "empresaId": 1,
+        "Id": 1,
         "Nome": "Saúde Digital Soluções",
         "Area": "Tecnologia em Saúde",
         "Email": "saudedigitalsolucoes@gmail.com",
@@ -9,7 +9,7 @@
         "Endereco": "Rua da Aurora, Ilha do Leite, Recife-PE"
     },
     {
-        "empresaId": 2,
+        "Id": 2,
         "Nome": "Mundo Tech",
         "Area": "Venda de Eletronicos",
         "Email": "mundotech@gmail.com",
