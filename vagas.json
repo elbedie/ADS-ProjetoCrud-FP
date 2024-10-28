@@ -1,0 +1,15 @@
+[
+    {
+        "vagaId": 1,
+        "vagaEmpresaId": 1,
+        "vagaFunção": "Gestão de Projetos",
+        "vagaCurso": "Engenharia Biomédica",
+        "vagaPeríodoMínimo": 6,
+        "vagaTurno": "noturno",
+        "vagaBolsa": 1.2,
+        "vagaAuxílioTransporte": "sim",
+        "vagaIdadeMinima": 18,
+        "vagaStatus": "aberta",
+        "vagaPrazo": "11/11/2024"
+    }
+]

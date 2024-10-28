@@ -1,1 +1,20 @@
-[]
+[
+    {
+        "empresaId": 1,
+        "Nome": "Saúde Digital Soluções",
+        "Area": "Tecnologia em Saúde",
+        "Email": "saudedigitalsolucoes@gmail.com",
+        "Site": "www.saudedigital.com.br",
+        "Telefone": "(081) 3334-2473",
+        "Endereco": "Rua da Aurora, Ilha do Leite, Recife-PE"
+    },
+    {
+        "empresaId": 2,
+        "Nome": "Mundo Tech",
+        "Area": "Venda de Eletrônicos",
+        "Email": "mundotech@gmail.com",
+        "Site": "www.mundotech.com.br",
+        "Telefone": "(081) 3433-0565",
+        "Endereco": "Av. Domingos Ferreira"
+    }
+]
