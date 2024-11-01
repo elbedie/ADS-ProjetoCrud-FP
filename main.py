@@ -14,17 +14,17 @@ def limpar_console():
     
 def PararOuContinuar():
     print("")
-    opc = int(input("Deseja continuar?\n1 - Voltar | 2 - Encerrar o programa: "))
-    if opc == 1:
-        return True
-    elif opc == 2:
-        print("Finalizando o programa!")
-        return False
-    else:
-        print("Opção inválida. Encerrando o programa!!! ")
-        return False
-    
-def CadastrarNoJson (caminhoDoArquivo, dicionarioModelo):
+    while True:
+        opc = int(input("Deseja continuar?\n1 - Voltar | 2 - Encerrar o programa: "))
+        if opc == 1:
+            return True
+        elif opc == 2:
+            print("Finalizando o programa!")
+            return False
+        else:
+            print("Opção inválida. Digite uma opção válida. ")
+
+def lerArquivo(caminhoDoArquivo):
     if os.path.exists(caminhoDoArquivo):
         with open(caminhoDoArquivo, 'r') as arquivo:
             try:
@@ -33,65 +33,58 @@ def CadastrarNoJson (caminhoDoArquivo, dicionarioModelo):
                 dicionariosModelos = []
     else:
         dicionariosModelos = []
-    
+    return dicionariosModelos
+
+def validarIndice(caminhoDoArquivo,indice):
+    dicionariosModelos = lerArquivo(caminhoDoArquivo)
+    if (indice-1) < len(dicionariosModelos):
+        return True
+    else:
+        print("Índice inválido!")
+        return False
+
+
+def CadastrarNoJson (caminhoDoArquivo, dicionarioModelo):
+    dicionariosModelos = lerArquivo(caminhoDoArquivo)
     dicionariosModelos.append(dicionarioModelo)
     
     with open(caminhoDoArquivo, 'w') as arquivo:
         json.dump(dicionariosModelos, arquivo, indent=4, ensure_ascii=False)
 
 def VisualizarJson(caminhoDoArquivo):
-    if os.path.exists(caminhoDoArquivo):
-        with open(caminhoDoArquivo, 'r') as arquivo:
-            try:
-                dicionariosModelos = json.load(arquivo)
-            except json.JSONDecodeError:
-                dicionariosModelos = []
-        
-        if dicionariosModelos:
-            i = 1
-            for dicionario in dicionariosModelos:
-                print(f"\nRegistro {i}:")
-                print("*******************************")
-                for chave, valor in dicionario.items():
-                    print(f"{chave.capitalize()}: {valor}")
-                print("*******************************")
-                i += 1
-                time.sleep(0.5)
-            return True
-        else:
+    dicionariosModelos = lerArquivo(caminhoDoArquivo)
+    if dicionariosModelos:
+        i = 1
+        for dicionario in dicionariosModelos:
+            print(f"\nRegistro {i}:")
+            print("*******************************")
+            for chave, valor in dicionario.items():
+                print(f"{chave.capitalize()}: {valor}")
+            print("*******************************")
+            i += 1
+            time.sleep(0.5)
+        return True
+    else:
             print("Nenhum registro encontrado.")
             return False
-    else:
-        print("Arquivo não encontrado.")
 
 
 def AtualizarJson(caminhoDoArquivo, indice, novosDados):
-    if os.path.exists(caminhoDoArquivo):
-        with open(caminhoDoArquivo, 'r') as arquivo:
-            try:
-                dicionariosModelos = json.load(arquivo)
-            except json.JSONDecodeError:
-                dicionariosModelos = []
+    dicionariosModelos = lerArquivo(caminhoDoArquivo)
+    registro_atual = dicionariosModelos[indice - 1]
 
-        if 1 <= indice <= len(dicionariosModelos):
-            registro_atual = dicionariosModelos[indice - 1]
+    # Atualiza somente os campos que não estão vazios
+    for chave, valor in novosDados.items():
+        if valor:  # Se o valor não for uma string vazia, atualiza
+            registro_atual[chave] = valor
 
-            # Atualiza somente os campos que não estão vazios
-            for chave, valor in novosDados.items():
-                if valor:  # Se o valor não for uma string vazia, atualiza
-                    registro_atual[chave] = valor
+    # Salva o registro atualizado no arquivo JSON
+    with open(caminhoDoArquivo, 'w') as arquivo:
+        json.dump(dicionariosModelos, arquivo, indent=4, ensure_ascii=False)
 
-            # Salva o registro atualizado no arquivo JSON
-            with open(caminhoDoArquivo, 'w') as arquivo:
-                json.dump(dicionariosModelos, arquivo, indent=4, ensure_ascii=False)
-
-            print("Atualizando registro...")
-            time.sleep(2)
-            print("Registro atualizado com sucesso!")
-        else:
-            print("Índice inválido.")
-    else:
-        print("Arquivo não encontrado.")
+    print("Atualizando registro...")
+    time.sleep(2)
+    print("Registro atualizado com sucesso!")
 
 def DeletarNoJson(caminhoDoArquivo, indice):
     if os.path.exists(caminhoDoArquivo):
@@ -169,6 +162,7 @@ def VisualizarJsonEmpresas(caminhoDoArquivo):
             return False
     else:
         print("Arquivo não encontrado.")
+        return False    
 
 def SistemaEmpresas():
     while True:
@@ -210,27 +204,29 @@ def SistemaEmpresas():
                 CadastrarNoJson(arquivoEmpresas, empresa)
                 print("Empresa cadastrada com sucesso!")
             case 2:
+                limpar_console()
                 VisualizarJsonEmpresas(arquivoEmpresas)
             case 3:
                 limpar_console()
-                if VisualizarJson(arquivoEmpresas):  
+                if VisualizarJson(arquivoEmpresas):
                     indice = int(input("Digite o índice da empresa que deseja atualizar: "))
-                    novo_nome = input("Digite o novo nome da Empresa (ou deixe em branco para manter o atual): ")
-                    nova_area = input("Digite a nova área de atuação da Empresa (ou deixe em branco para manter o atual): ")
-                    novo_email = input("Digite o novo e-mail da Empresa (ou deixe em branco para manter o atual): ")
-                    novo_site = input("Digite o novo site da Empresa (ou deixe em branco para manter o atual): ")
-                    novo_telefone = input("Digite o novo telefone da Empresa (ou deixe em branco para manter o atual): ")
-                    novo_endereco = input("Digite o novo endereço da Empresa (ou deixe em branco para manter o atual): ")
+                    if validarIndice(arquivoEmpresas, indice): 
+                        novo_nome = input("Digite o novo nome da Empresa (ou deixe em branco para manter o atual): ")
+                        nova_area = input("Digite a nova área de atuação da Empresa (ou deixe em branco para manter o atual): ")
+                        novo_email = input("Digite o novo e-mail da Empresa (ou deixe em branco para manter o atual): ")
+                        novo_site = input("Digite o novo site da Empresa (ou deixe em branco para manter o atual): ")
+                        novo_telefone = input("Digite o novo telefone da Empresa (ou deixe em branco para manter o atual): ")
+                        novo_endereco = input("Digite o novo endereço da Empresa (ou deixe em branco para manter o atual): ")
 
-                    novosDados = {
-                        "Nome": novo_nome,
-                        "Area": nova_area,
-                        "Email": novo_email,
-                        "Site": novo_site,
-                        "Telefone": novo_telefone,
-                        "Endereco": novo_endereco
-                    }
-                    AtualizarJson(arquivoEmpresas, indice, novosDados)
+                        novosDados = {
+                            "Nome": novo_nome,
+                            "Area": nova_area,
+                            "Email": novo_email,
+                            "Site": novo_site,
+                            "Telefone": novo_telefone,
+                            "Endereco": novo_endereco
+                        }
+                        AtualizarJson(arquivoEmpresas, indice, novosDados)
             case 4:
                 limpar_console()
                 VisualizarJson(arquivoEmpresas)
@@ -393,4 +389,3 @@ def MenuPrincipal():
 
 if __name__ == "__main__":
     MenuPrincipal()
-
