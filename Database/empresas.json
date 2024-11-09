@@ -1,0 +1,20 @@
+[
+    {
+        "Id": 2,
+        "Nome": "Mundo Tech",
+        "Area": "Venda de Eletronicos",
+        "Email": "mundotech@gmail.com",
+        "Site": "www.mundotech.com.br",
+        "Telefone": "(081) 3433-0565",
+        "Endereco": "Av. Domingos Ferreira"
+    },
+    {
+        "Id": 3,
+        "Nome": "Saúde+",
+        "Area": "Saúde",
+        "Email": "saude@mais.com",
+        "Site": "saude.com.br",
+        "Telefone": "81992929292",
+        "Endereco": "Rua da Saúde"
+    }
+]

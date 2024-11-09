@@ -3,9 +3,9 @@ import os
 import time
 
 # Arquivos JSON
-arquivoEmpresas = "empresas.json"
-arquivoEstudantes = "estudantes.json"
-arquivoVagas = "vagas.json"
+arquivoEmpresas = "Database/empresas.json"
+arquivoEstudantes = "Database/estudantes.json"
+arquivoVagas = "Database/vagas.json"
 
 # --------------------------------------- FUNÇÕES GLOBAIS ------------------------------------------
 
@@ -26,7 +26,7 @@ def PararOuContinuar():
 
 def lerArquivo(caminhoDoArquivo):
     if os.path.exists(caminhoDoArquivo):
-        with open(caminhoDoArquivo, 'r') as arquivo:
+        with open(caminhoDoArquivo, 'r', encoding="utf8") as arquivo:
             try:
                 dicionariosModelos = json.load(arquivo)
             except json.JSONDecodeError:
@@ -48,7 +48,7 @@ def CadastrarNoJson (caminhoDoArquivo, dicionarioModelo):
     dicionariosModelos = lerArquivo(caminhoDoArquivo)
     dicionariosModelos.append(dicionarioModelo)
     
-    with open(caminhoDoArquivo, 'w') as arquivo:
+    with open(caminhoDoArquivo, 'w', encoding="utf8") as arquivo:
         json.dump(dicionariosModelos, arquivo, indent=4, ensure_ascii=False)
 
 def VisualizarJson(caminhoDoArquivo):
@@ -88,7 +88,7 @@ def AtualizarJson(caminhoDoArquivo, indice, novosDados):
 
 def DeletarNoJson(caminhoDoArquivo, indice):
     if os.path.exists(caminhoDoArquivo):
-        with open(caminhoDoArquivo, 'r') as arquivo:
+        with open(caminhoDoArquivo, 'r', encoding="utf8") as arquivo:
             try:
                 dicionariosModelos = json.load(arquivo)
             except json.JSONDecodeError:
@@ -114,7 +114,6 @@ def DeletarNoJson(caminhoDoArquivo, indice):
 
 # --------------------------------------- !FUNÇÕES DO SISTEMA EMPRESA! ------------------------------------------
 
-# Função para obter o próximo ID de empresa automaticamente
 def obter_proximo_id_empresa():
     if os.path.exists(arquivoEmpresas):
         with open(arquivoEmpresas, 'r') as arquivo:
@@ -129,7 +128,7 @@ def obter_proximo_id_empresa():
 
 def VisualizarJsonEmpresas(caminhoDoArquivo):
     if os.path.exists(caminhoDoArquivo):
-        with open(caminhoDoArquivo, 'r') as arquivo:
+        with open(caminhoDoArquivo, 'r', encoding="utf8") as arquivo:
             try:
                 dicionariosModelos = json.load(arquivo)
             except json.JSONDecodeError:
@@ -234,6 +233,7 @@ def SistemaEmpresas():
                 DeletarNoJson(arquivoEmpresas, indice)
             case 5:
                 MenuPrincipal()
+                return
             case 0:
                 print("Finalizando o programa!")
                 return False
@@ -247,7 +247,9 @@ def SistemaEmpresas():
             break
 
 
+
 # --------------------------------------- !SISTEMA DE VAGAS! ------------------------------------------
+
 
 
 def obter_proximo_id_vaga():
@@ -348,7 +350,8 @@ def sistema_vagas():
             case 4:
                 deletar_vaga()
             case 5:
-                MenuPrincipal(0)
+                MenuPrincipal()
+                return
             case 0:
                 print("Finalizando o programa!")
                 return False
@@ -358,6 +361,7 @@ def sistema_vagas():
 
         if not PararOuContinuar():
             break
+
 
 # --------------------------------------- !MENU PRINCIPAL! ------------------------------------------
 
