@@ -125,6 +125,7 @@ def DeletarNoJson(caminhoDoArquivo, indice):
         print("Arquivo não encontrado.")
 
 
+
 # --------------------------------------- !FUNÇÕES DO SISTEMA EMPRESA! ------------------------------------------
 
 def Obter_Prox_Id_Empresa():
@@ -176,6 +177,27 @@ def VisualizarJsonEmpresas(caminhoDoArquivo):
         print("Arquivo não encontrado.")
         return False    
 
+def BuscarNoJsonEmpresas(caminhoDoArquivo):
+    Limpar_Console()
+    dicionariosModelos = LerArquivo(caminhoDoArquivo)
+    print("EMPRESAS CADASTRADAS NO SISTEMA")
+    print("-"*40)
+    for modelo in dicionariosModelos:
+        print("[", modelo["Nome"], "]")
+    empresaEscolhida = input("Digite o nome da Empresa que deseja visualizar: ")
+    for dicionario in dicionariosModelos:
+        if 'Nome' in dicionario and str(dicionario['Nome']) == empresaEscolhida:
+            print(f"\nEmpresa: {empresaEscolhida}:")
+            print("*******************************")
+            for chave, valor in dicionario.items():
+                print(f"{chave.capitalize()}: {valor}")
+            print("*******************************")
+            return True
+            
+        print("Empresa não foi encontrada. Verifiquei se digitou o nome corretamente.")
+        return False
+    
+
 def SistemaEmpresas():
     while True:
         Limpar_Console()
@@ -183,10 +205,11 @@ def SistemaEmpresas():
         print(f"{'CADASTRO: EMPRESAS':^40}")
         print("=" * 40)
         print("1 - Cadastrar Empresa")
-        print("2 - Visualizar Empresas Cadastradas")
-        print("3 - Atualizar informações da Empresa")
+        print("2 - Visualizar Empresas")
+        print("3 - Atualizar Empresa")
         print("4 - Excluir Empresa")
-        print("5 - Voltar para o Menu Principal")
+        print("5 - Buscar Empresa")
+        print("6 - Voltar para o Menu Principal")
         print("0 - Encerrar o Programa")
         print("=" * 40)
 
@@ -245,6 +268,8 @@ def SistemaEmpresas():
                 indice = int(input("Digite o índice da Empresa que deseja excluir: "))
                 DeletarNoJson(arquivoEmpresas, indice)
             case 5:
+                BuscarNoJsonEmpresas(arquivoEmpresas)
+            case 6:
                 MenuPrincipal()
                 return
             case 0:
@@ -281,10 +306,7 @@ def cadastrar_vaga():
     Limpar_Console()
     print("Cadastro de Vaga")
     
-    # exibir ID da empresa em construção
-    
     vaga = {
-        "IdEmpresa": input("Id da Empresa: "),
         "Funcao": input("Função: "),
         "Curso": input("Curso: "),
         "Periodo Minimo": int(input("Período mínimo: ")),
@@ -338,6 +360,45 @@ def deletar_vaga():
 
     DeletarNoJson(arquivoVagas, id)
 
+def BuscarNoJsonVagas(caminhoDoArquivo):
+    Limpar_Console()
+    dicionariosModelos = LerArquivo(caminhoDoArquivo)
+    print("VAGAS CADASTRADAS NO SISTEMA")
+    print("-"*40)
+    
+    # Exibindo todos os cursos cadastrados
+    cursos = set()  # Usando um set para evitar duplicatas
+    for modelo in dicionariosModelos:
+        cursos.add(modelo["Curso"])  # Adicionando cursos únicos
+    print("Cursos disponíveis:", ", ".join(cursos))
+    
+    # Entrada do curso escolhido
+    cursoEscolhido = input("Digite o nome do curso que deseja visualizar as vagas de estágio: ")
+
+    encontrou_vagas = False  # Variável para verificar se encontramos alguma vaga para o curso
+
+    # Buscando vagas para o curso escolhido
+    for dicionario in dicionariosModelos:
+        if 'Curso' in dicionario and str(dicionario['Curso']) == cursoEscolhido:
+            if not encontrou_vagas:
+                print(f"Vagas para o curso de {cursoEscolhido}:")
+                print("*******************************")
+            encontrou_vagas = True
+            # Exibe os detalhes da vaga
+            print(f"VAGA")
+            print("*******************************")
+            for chave, valor in dicionario.items():
+                print(f"{chave.capitalize()}: {valor}")
+            print("*******************************")
+    
+    # Se não encontrar nenhuma vaga para o curso escolhido
+    if not encontrou_vagas:
+        print("Nenhuma vaga encontrada para o curso:", cursoEscolhido)
+        return False
+    
+    return True
+
+
 def sistema_vagas():
     while True:
         Limpar_Console()
@@ -348,7 +409,8 @@ def sistema_vagas():
         print("2 - Visualizar Vagas")
         print("3 - Atualizar Vaga")
         print("4 - Excluir Vaga")
-        print("5 - Voltar para o Menu Principal")
+        print("5 - Buscar vaga")
+        print("6 - Voltar para o Menu Principal")
         print("0 - Encerrar o Programa")
         print("=" * 40)
 
@@ -363,6 +425,8 @@ def sistema_vagas():
             case 4:
                 deletar_vaga()
             case 5:
+                BuscarNoJsonVagas(arquivoVagas)
+            case 6:
                 MenuPrincipal()
                 return
             case 0:
