@@ -9,22 +9,30 @@ arquivoVagas = "Database/vagas.json"
 
 # --------------------------------------- FUNÇÕES GLOBAIS ------------------------------------------
 
-def limpar_console():
+def Limpar_Console():
     os.system('cls' if os.name == 'nt' else 'clear')
     
 def PararOuContinuar():
     print("")
     while True:
-        opc = int(input("Deseja continuar?\n1 - Voltar | 2 - Encerrar o programa: "))
-        if opc == 1:
-            return True
-        elif opc == 2:
-            print("Finalizando o programa!")
-            return False
-        else:
-            print("Opção inválida. Digite uma opção válida. ")
+        try:
+            # Tentativa de conversão da entrada para int
+            opc = int(input("Deseja continuar?\n1 - Voltar | 2 - Encerrar o programa: "))
+            
+            if opc == 1:
+                return True
+            elif opc == 2:
+                print("Finalizando o programa!")
+                return False
+            else:
+                print("Opção inválida. Digite uma opção válida.")
+        
+        except ValueError:
+            # Se não for possível converter para int, o ValueError será lançado
+            print("Entrada inválida! Por favor, digite um número inteiro (1 ou 2).")
 
-def lerArquivo(caminhoDoArquivo):
+
+def LerArquivo(caminhoDoArquivo):
     if os.path.exists(caminhoDoArquivo):
         with open(caminhoDoArquivo, 'r', encoding="utf8") as arquivo:
             try:
@@ -35,24 +43,28 @@ def lerArquivo(caminhoDoArquivo):
         dicionariosModelos = []
     return dicionariosModelos
 
-def validarIndice(caminhoDoArquivo,indice):
-    dicionariosModelos = lerArquivo(caminhoDoArquivo)
-    if (indice-1) < len(dicionariosModelos):
-        return True
-    else:
-        print("Índice inválido!")
+def ValidarIndice(caminhoDoArquivo,indice):
+    dicionariosModelos = LerArquivo(caminhoDoArquivo)
+    id_encontrado = False
+    for dicionario in dicionariosModelos:
+        if dicionario['Id'] == indice:
+            id_encontrado = True
+            break
+    if not id_encontrado:
+        print("ID inválido.")
         return False
+    return True
 
 
 def CadastrarNoJson (caminhoDoArquivo, dicionarioModelo):
-    dicionariosModelos = lerArquivo(caminhoDoArquivo)
+    dicionariosModelos = LerArquivo(caminhoDoArquivo)
     dicionariosModelos.append(dicionarioModelo)
     
     with open(caminhoDoArquivo, 'w', encoding="utf8") as arquivo:
         json.dump(dicionariosModelos, arquivo, indent=4, ensure_ascii=False)
 
 def VisualizarJson(caminhoDoArquivo):
-    dicionariosModelos = lerArquivo(caminhoDoArquivo)
+    dicionariosModelos = LerArquivo(caminhoDoArquivo)
     if dicionariosModelos:
         i = 1
         for dicionario in dicionariosModelos:
@@ -69,17 +81,18 @@ def VisualizarJson(caminhoDoArquivo):
             return False
 
 
-def AtualizarJson(caminhoDoArquivo, indice, novosDados):
-    dicionariosModelos = lerArquivo(caminhoDoArquivo)
-    registro_atual = dicionariosModelos[indice - 1]
-
-    # Atualiza somente os campos que não estão vazios
-    for chave, valor in novosDados.items():
-        if valor:  # Se o valor não for uma string vazia, atualiza
-            registro_atual[chave] = valor
-
+def AtualizarJson(caminhoDoArquivo, id, novosDados):
+    # Ler o arquivo JSON
+    dicionariosModelos = LerArquivo(caminhoDoArquivo)
+    # Verificar se o JSON é uma lista e procurar o item com o 'Id' correspondente
+    for modelo in dicionariosModelos:
+        if modelo['Id'] == id:
+            for chave, valor in novosDados.items():
+                if valor:  # Se o valor não for vazio, atualiza
+                    modelo[chave] = valor
+            break  # Saímos do loop após encontrar o modelo
     # Salva o registro atualizado no arquivo JSON
-    with open(caminhoDoArquivo, 'w') as arquivo:
+    with open(caminhoDoArquivo, 'w', encoding="utf8") as arquivo:
         json.dump(dicionariosModelos, arquivo, indent=4, ensure_ascii=False)
 
     print("Atualizando registro...")
@@ -114,7 +127,7 @@ def DeletarNoJson(caminhoDoArquivo, indice):
 
 # --------------------------------------- !FUNÇÕES DO SISTEMA EMPRESA! ------------------------------------------
 
-def obter_proximo_id_empresa():
+def Obter_Prox_Id_Empresa():
     if os.path.exists(arquivoEmpresas):
         with open(arquivoEmpresas, 'r') as arquivo:
             try:
@@ -165,7 +178,7 @@ def VisualizarJsonEmpresas(caminhoDoArquivo):
 
 def SistemaEmpresas():
     while True:
-        limpar_console()
+        Limpar_Console()
         print("\n" + "=" * 40)
         print(f"{'CADASTRO: EMPRESAS':^40}")
         print("=" * 40)
@@ -180,7 +193,7 @@ def SistemaEmpresas():
         opc = int(input("\nSelecione uma opção: "))
         match(opc):
             case 1:
-                limpar_console()
+                Limpar_Console()
                 empresaNome = input("Digite o nome da Empresa: ")
                 empresaArea = input("Digite a área de atuação da Empresa: ")
                 empresaEmail = input("Digite o e-mail da Empresa: ")
@@ -190,7 +203,7 @@ def SistemaEmpresas():
                 
                 # Gera o próximo ID automaticamente
                 empresa = {
-                    "Id": obter_proximo_id_empresa(),
+                    "Id": Obter_Prox_Id_Empresa(),
                     "Nome": empresaNome,
                     "Area": empresaArea,
                     "Email": empresaEmail,
@@ -203,13 +216,13 @@ def SistemaEmpresas():
                 CadastrarNoJson(arquivoEmpresas, empresa)
                 print("Empresa cadastrada com sucesso!")
             case 2:
-                limpar_console()
+                Limpar_Console()
                 VisualizarJsonEmpresas(arquivoEmpresas)
             case 3:
-                limpar_console()
+                Limpar_Console()
                 if VisualizarJson(arquivoEmpresas):
-                    indice = int(input("Digite o índice da empresa que deseja atualizar: "))
-                    if validarIndice(arquivoEmpresas, indice): 
+                    id = int(input("Digite o ID da empresa que deseja atualizar: "))
+                    if ValidarIndice(arquivoEmpresas, id): 
                         novo_nome = input("Digite o novo nome da Empresa (ou deixe em branco para manter o atual): ")
                         nova_area = input("Digite a nova área de atuação da Empresa (ou deixe em branco para manter o atual): ")
                         novo_email = input("Digite o novo e-mail da Empresa (ou deixe em branco para manter o atual): ")
@@ -225,9 +238,9 @@ def SistemaEmpresas():
                             "Telefone": novo_telefone,
                             "Endereco": novo_endereco
                         }
-                        AtualizarJson(arquivoEmpresas, indice, novosDados)
+                        AtualizarJson(arquivoEmpresas, id, novosDados)
             case 4:
-                limpar_console()
+                Limpar_Console()
                 VisualizarJson(arquivoEmpresas)
                 indice = int(input("Digite o índice da Empresa que deseja excluir: "))
                 DeletarNoJson(arquivoEmpresas, indice)
@@ -238,7 +251,7 @@ def SistemaEmpresas():
                 print("Finalizando o programa!")
                 return False
             case _:
-                limpar_console()
+                Limpar_Console()
                 print("Opção inválida! Você voltará para o Menu.")
                 print("-" * 10)
                 continue
@@ -252,7 +265,7 @@ def SistemaEmpresas():
 
 
 
-def obter_proximo_id_vaga():
+def Obter_Prox_Id_Vaga():
     if os.path.exists(arquivoVagas):
         with open(arquivoVagas, 'r') as arquivo:
             try:
@@ -265,7 +278,7 @@ def obter_proximo_id_vaga():
     return 1
 
 def cadastrar_vaga():
-    limpar_console()
+    Limpar_Console()
     print("Cadastro de Vaga")
     
     # exibir ID da empresa em construção
@@ -287,12 +300,12 @@ def cadastrar_vaga():
     print("Vaga cadastrada com sucesso.")
 
 def visualizar_vagas():
-    limpar_console()
+    Limpar_Console()
     print("Visualização de Vagas")
     VisualizarJson(arquivoVagas)
 
 def atualizar_vaga():
-    limpar_console()
+    Limpar_Console()
     visualizar_vagas()
     indice = int(input("Digite o índice da vaga que deseja atualizar: "))
     nova_funcao = input("Digite a nova função (ou deixe em branco para manter a atual): ")
@@ -319,7 +332,7 @@ def atualizar_vaga():
     AtualizarJson(arquivoVagas, indice, novosDados)
 
 def deletar_vaga():
-    limpar_console()
+    Limpar_Console()
     visualizar_vagas()
     id = int(input("Digite o ID da vaga que deseja deletar: "))
 
@@ -327,7 +340,7 @@ def deletar_vaga():
 
 def sistema_vagas():
     while True:
-        limpar_console()
+        Limpar_Console()
         print("\n" + "=" * 40)
         print(f"{'SISTEMA DE VAGAS':^40}")
         print("=" * 40)
@@ -366,7 +379,7 @@ def sistema_vagas():
 # --------------------------------------- !MENU PRINCIPAL! ------------------------------------------
 
 def MenuPrincipal():
-    limpar_console()
+    Limpar_Console()
     print("Vagas de Estágios")
     print("Bem-vindo(a) ao Centro de Vagas!")
     print("Vamos começar?")
