@@ -22,14 +22,14 @@ def PararOuContinuar():
             if opc == 1:
                 return True
             elif opc == 2:
-                print("Finalizando o programa!")
+                print("\033[1;33mFinalizando o programa!\033[m")
                 return False
             else:
-                print("Opção inválida. Digite uma opção válida.")
+                print("\033[1;31mOpção inválida. Digite uma opção válida.\033[m")
         
         except ValueError:
             # Se não for possível converter para int, o ValueError será lançado
-            print("Entrada inválida! Por favor, digite um número inteiro (1 ou 2).")
+            print("\033[1;31mEntrada inválida! Por favor, digite um número inteiro (1 ou 2).\033[m")
 
 
 def LerArquivo(caminhoDoArquivo):
@@ -51,7 +51,7 @@ def ValidarIndice(caminhoDoArquivo,indice):
             id_encontrado = True
             break
     if not id_encontrado:
-        print("ID inválido.")
+        print("\033[1;31mID inválido.\033[m")
         return False
     return True
 
@@ -77,7 +77,7 @@ def VisualizarJson(caminhoDoArquivo):
             time.sleep(0.5)
         return True
     else:
-            print("Nenhum registro encontrado.")
+            print("\033[1;31mNenhum registro encontrado.\033[m")
             return False
 
 
@@ -97,7 +97,7 @@ def AtualizarJson(caminhoDoArquivo, id, novosDados):
 
     print("Atualizando registro...")
     time.sleep(2)
-    print("Registro atualizado com sucesso!")
+    print("\033[1;32mRegistro atualizado com sucesso!\033[m")
 
 def DeletarNoJson(caminhoDoArquivo, indice):
     if os.path.exists(caminhoDoArquivo):
@@ -118,11 +118,11 @@ def DeletarNoJson(caminhoDoArquivo, indice):
 
             print("Removendo registro...")
             time.sleep(2)
-            print("Registro deletado com sucesso!")
+            print("\033[1;32mRegistro deletado com sucesso!\033[m")
         else:
-            print("Índice inválido.")
+            print("\033[1;31mÍndice inválido.\033[m")
     else:
-        print("Arquivo não encontrado.")
+        print("\033[1;31mArquivo não encontrado.\033[m")
 
 
 
@@ -150,41 +150,49 @@ def VisualizarJsonEmpresas(caminhoDoArquivo):
         
         if dicionariosModelos:
             # Exibir IDs disponíveis
-            print("IDs disponíveis:")
+            print("\033[0;36m-\033[m" * 80)
+            print(f'\033[1;35m{"EMPRESAS CADASTRADAS":^75}\033[m')
+            print("\033[0;36m-\033[m" * 80)
+            print("")
             for dicionario in dicionariosModelos:
                 if 'Id' in dicionario:
-                    print(f"ID: {dicionario['Id']} | Empresa: {dicionario['Nome']}")
+                    print("ID: " + str(dicionario['Id']).center(10) + " | EMPRESA: " + str(dicionario['Nome']).center(10))
+
 
             # Solicitar ao usuário o ID da empresa
-            id_escolhido = input("Digite o ID da empresa que deseja ver os detalhes: ")
+            id_escolhido = input("\n▸ Digite o ID da empresa que deseja ver os detalhes: ")
 
             # Encontrar e exibir os detalhes do registro correspondente ao ID escolhido
             for dicionario in dicionariosModelos:
                 if 'Id' in dicionario and str(dicionario['Id']) == id_escolhido:
-                    print(f"\nDetalhes da empresa com ID {id_escolhido}:")
-                    print("*******************************")
+                    print("")
+                    print("\033[0;36m-\033[m" * 70)
+                    print(f"\033[1;34mDetalhes da empresa com ID {id_escolhido}\033[m".center(75))
+                    print("\033[0;36m-\033[m" * 70)
                     for chave, valor in dicionario.items():
                         print(f"{chave.capitalize()}: {valor}")
-                    print("*******************************")
+                    print("\033[0;36m-\033[m" * 70)
                     return True
             
-            print("ID não encontrado.")
+            print("\033[1;31mID não encontrado.\033[m")
             return False
         else:
-            print("Nenhum registro encontrado.")
+            print("\033[1;31mNenhum registro encontrado.\033[m")
             return False
     else:
-        print("Arquivo não encontrado.")
+        print("\033[1;31mArquivo não encontrado.\033[m")
         return False    
 
 def BuscarNoJsonEmpresas(caminhoDoArquivo):
     Limpar_Console()
     dicionariosModelos = LerArquivo(caminhoDoArquivo)
-    print("EMPRESAS CADASTRADAS NO SISTEMA")
-    print("-"*40)
+    print("")
+    print("\033[0;36m-\033[m" * 70)
+    print(f'\033[1;35m{"EMPRESAS CADASTRADAS NO SISTEMA":^75}\033[m')
+    print("\033[0;36m-\033[m" * 70)
     for modelo in dicionariosModelos:
         print("[", modelo["Nome"], "]")
-    empresaEscolhida = input("Digite o nome da Empresa que deseja visualizar: ")
+    empresaEscolhida = input("\n ▸ Digite o nome da Empresa que deseja visualizar: ")
     for dicionario in dicionariosModelos:
         if 'Nome' in dicionario and str(dicionario['Nome']) == empresaEscolhida:
             print(f"\nEmpresa: {empresaEscolhida}:")
@@ -194,16 +202,16 @@ def BuscarNoJsonEmpresas(caminhoDoArquivo):
             print("*******************************")
             return True
             
-        print("Empresa não foi encontrada. Verifiquei se digitou o nome corretamente.")
+        print("\033[1;31mEmpresa não foi encontrada. Verifique se digitou o nome corretamente.\033[m")
         return False
     
 
 def SistemaEmpresas():
     while True:
         Limpar_Console()
-        print("\n" + "=" * 40)
-        print(f"{'CADASTRO: EMPRESAS':^40}")
-        print("=" * 40)
+        print("\033[0;36m=\033[m" * 40)
+        print(f"\033[1;35m{'MÓDULO DE CADASTRO DE EMPRESAS':^40}\033[m")
+        print("\033[0;36m=\033[m" * 40)
         print("1 - Cadastrar Empresa")
         print("2 - Visualizar Empresas")
         print("3 - Atualizar Empresa")
@@ -211,18 +219,22 @@ def SistemaEmpresas():
         print("5 - Buscar Empresa")
         print("6 - Voltar para o Menu Principal")
         print("0 - Encerrar o Programa")
-        print("=" * 40)
+        print("\033[0;36m=\033[m" * 40)
 
-        opc = int(input("\nSelecione uma opção: "))
+        opc = int(input("\n\033[0;34m➤  Selecione uma opção:\033[m "))
         match(opc):
             case 1:
                 Limpar_Console()
-                empresaNome = input("Digite o nome da Empresa: ")
-                empresaArea = input("Digite a área de atuação da Empresa: ")
-                empresaEmail = input("Digite o e-mail da Empresa: ")
-                empresaSite = input("Digite o site da empresa: ")
-                empresaTelefone = input("Digite o telefone da Empresa: ")
-                empresaEndereco = input("Digite o endereço da Empresa: ")
+                print("\033[0;36m-\033[m" * 70)
+                print(f'\033[1;35m{"CADASTRAR NOVA EMPRESA":^60}\033[m')
+                print("\033[0;36m-\033[m" * 70)
+                print("")
+                empresaNome = input("▸ Digite o nome da Empresa: ")
+                empresaArea = input("▸ Digite a área de atuação da Empresa: ")
+                empresaEmail = input("▸ Digite o e-mail da Empresa: ")
+                empresaSite = input("▸ Digite o site da empresa: ")
+                empresaTelefone = input("▸ Digite o telefone da Empresa: ")
+                empresaEndereco = input("▸ Digite o endereço da Empresa: ")
                 
                 # Gera o próximo ID automaticamente
                 empresa = {
@@ -237,21 +249,25 @@ def SistemaEmpresas():
                 
                 # Salva a empresa no JSON
                 CadastrarNoJson(arquivoEmpresas, empresa)
-                print("Empresa cadastrada com sucesso!")
+                print("\033[1;32mEmpresa cadastrada com sucesso!\033[m")
             case 2:
                 Limpar_Console()
                 VisualizarJsonEmpresas(arquivoEmpresas)
             case 3:
                 Limpar_Console()
+                print("\033[0;36m-\033[m" * 80)
+                print(f'\033[1;35m{"ATUALIZAR EMPRESA":^75}\033[m')
+                print("\033[0;36m-\033[m" * 80)
+                print("")
                 if VisualizarJson(arquivoEmpresas):
-                    id = int(input("Digite o ID da empresa que deseja atualizar: "))
+                    id = int(input("▸ Digite o ID da empresa que deseja atualizar: "))
                     if ValidarIndice(arquivoEmpresas, id): 
-                        novo_nome = input("Digite o novo nome da Empresa (ou deixe em branco para manter o atual): ")
-                        nova_area = input("Digite a nova área de atuação da Empresa (ou deixe em branco para manter o atual): ")
-                        novo_email = input("Digite o novo e-mail da Empresa (ou deixe em branco para manter o atual): ")
-                        novo_site = input("Digite o novo site da Empresa (ou deixe em branco para manter o atual): ")
-                        novo_telefone = input("Digite o novo telefone da Empresa (ou deixe em branco para manter o atual): ")
-                        novo_endereco = input("Digite o novo endereço da Empresa (ou deixe em branco para manter o atual): ")
+                        novo_nome = input("▸ Digite o novo nome da Empresa (ou deixe em branco para manter o atual): ")
+                        nova_area = input("▸ Digite a nova área de atuação da Empresa (ou deixe em branco para manter o atual): ")
+                        novo_email = input("▸ Digite o novo e-mail da Empresa (ou deixe em branco para manter o atual): ")
+                        novo_site = input("▸ Digite o novo site da Empresa (ou deixe em branco para manter o atual): ")
+                        novo_telefone = input("▸ Digite o novo telefone da Empresa (ou deixe em branco para manter o atual): ")
+                        novo_endereco = input("▸ Digite o novo endereço da Empresa (ou deixe em branco para manter o atual): ")
 
                         novosDados = {
                             "Nome": novo_nome,
@@ -265,7 +281,7 @@ def SistemaEmpresas():
             case 4:
                 Limpar_Console()
                 VisualizarJson(arquivoEmpresas)
-                indice = int(input("Digite o índice da Empresa que deseja excluir: "))
+                indice = int(input("▸ Digite o índice da Empresa que deseja excluir: "))
                 DeletarNoJson(arquivoEmpresas, indice)
             case 5:
                 BuscarNoJsonEmpresas(arquivoEmpresas)
@@ -273,11 +289,11 @@ def SistemaEmpresas():
                 MenuPrincipal()
                 return
             case 0:
-                print("Finalizando o programa!")
+                print("\033[1;33mFinalizando o programa!\033[m")
                 return False
             case _:
                 Limpar_Console()
-                print("Opção inválida! Você voltará para o Menu.")
+                print("\033[1;31mOpção inválida! Você voltará para o Menu.\033[m")
                 print("-" * 10)
                 continue
 
@@ -444,15 +460,15 @@ def sistema_vagas():
 
 def MenuPrincipal():
     Limpar_Console()
-    print("Vagas de Estágios")
-    print("Bem-vindo(a) ao Centro de Vagas!")
-    print("Vamos começar?")
+    print("\033[1;35m✩░▒▓▆▅▃▂▁SISTEMA DE VAGAS DE ESTAGIO▁▂▃▅▆▓▒░✩\033[m\n")
+    print("\033[34mBem-vindo(a) ao Centro de Vagas!\n")
+    print("\033[34mVamos começar?\033[m\n")
     print("1 - Sistema de Estudantes")
     print("2 - Sistema de Empresas")
     print("3 - Sistema de Vagas")
     print("0 - Encerrar o programa")
     
-    opcMenuPrincipal = int(input("Insira a opção desejada: "))
+    opcMenuPrincipal = int(input("\033[34m\n➤  Insira a opção desejada:\033[m "))
     
     match opcMenuPrincipal:
         case 1:
