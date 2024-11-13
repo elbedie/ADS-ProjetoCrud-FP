@@ -468,7 +468,7 @@ def carregar_estudantes():
         return json.load(f)
 
 def exibir_titulo():
-    print("\033[1;35m✩░▒▓▆▅▃▂▁MÓDULO DO ESTUDANTE▁▂▃▅▆▓▒░✩\033[m\n")
+    print("\033[1;35m✩░▒▓▆▅▃▂▁MÓDULO DOS ESTUDANTES▁▂▃▅▆▓▒░✩\033[m\n")
 
 def exibir_subtitulo(texto):
     Limpar_Console()
