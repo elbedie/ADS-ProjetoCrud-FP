@@ -7,8 +7,20 @@
     },
     {
         "nome": "Hyngrid",
-        "curso": "Ads",
+        "curso": "ADS",
         "periodo": 4,
         "turno": "Noturno"
+    },
+    {
+        "nome": "Diego",
+        "curso": "ADS",
+        "periodo": 1,
+        "turno": "Noturno"
+    },
+    {
+        "nome": "Kitler",
+        "curso": "Historia",
+        "periodo": 9,
+        "turno": "Matutino"
     }
 ]

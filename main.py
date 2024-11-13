@@ -17,19 +17,22 @@ def PararOuContinuar():
     while True:
         try:
             # Tentativa de conversão da entrada para int
-            opc = int(input("Deseja continuar?\n1 - Voltar | 2 - Encerrar o programa: "))
+            print("\033[0;36m-\033[m" * 70)
+            print("\033[1;34m1 - Voltar | 2 - Encerrar o programa")
+            opc = int(input("▸ Deseja continuar?\033[m "))
             
             if opc == 1:
                 return True
             elif opc == 2:
-                print("\033[1;33mFinalizando o programa!\033[m")
+                print("\033[1;33mFinalizando o programa...\033[m")
+                time.sleep(1)
                 return False
             else:
-                print("\033[1;31mOpção inválida. Digite uma opção válida.\033[m")
+                print("\033[1;31m❌ Opção inválida. Digite uma opção válida.\033[m")
         
         except ValueError:
             # Se não for possível converter para int, o ValueError será lançado
-            print("\033[1;31mEntrada inválida! Por favor, digite um número inteiro (1 ou 2).\033[m")
+            print("\033[1;31m❌ Entrada inválida! Por favor, digite um número inteiro (1 ou 2).\033[m")
 
 
 def LerArquivo(caminhoDoArquivo):
@@ -51,7 +54,7 @@ def ValidarIndice(caminhoDoArquivo,indice):
             id_encontrado = True
             break
     if not id_encontrado:
-        print("\033[1;31mID inválido.\033[m")
+        print("\033[1;31m❌ ID inválido.\033[m")
         return False
     return True
 
@@ -77,7 +80,7 @@ def VisualizarJson(caminhoDoArquivo):
             time.sleep(0.5)
         return True
     else:
-            print("\033[1;31mNenhum registro encontrado.\033[m")
+            print("\033[1;31m❌ Nenhum registro encontrado.\033[m")
             return False
 
 
@@ -97,7 +100,7 @@ def AtualizarJson(caminhoDoArquivo, id, novosDados):
 
     print("Atualizando registro...")
     time.sleep(2)
-    print("\033[1;32mRegistro atualizado com sucesso!\033[m")
+    print("\033[1;32m✅ Registro atualizado com sucesso!\033[m")
 
 import os
 import json
@@ -128,11 +131,11 @@ def DeletarNoJson(caminhoDoArquivo, id):
 
             print("Removendo registro...")
             time.sleep(2)
-            print("\033[1;32mRegistro deletado com sucesso!\033[m")
+            print("\033[1;32m✅ Registro deletado com sucesso!\033[m")
         else:
-            print("\033[1;31mO 'Id' especificado não foi encontrado.\033[m")
+            print("\033[1;31m❌ O 'Id' especificado não foi encontrado.\033[m")
     else:
-        print("\033[1;31mArquivo não encontrado.\033[m")
+        print("\033[1;31m❌ Arquivo não encontrado.\033[m")
 
 
 
@@ -185,13 +188,13 @@ def VisualizarJsonEmpresas(caminhoDoArquivo):
                     print("\033[0;36m-\033[m" * 70)
                     return True
             
-            print("\033[1;31mID não encontrado.\033[m")
+            print("\033[1;31m❌ ID não encontrado.\033[m")
             return False
         else:
-            print("\033[1;31mNenhum registro encontrado.\033[m")
+            print("\033[1;31m❌ Nenhum registro encontrado.\033[m")
             return False
     else:
-        print("\033[1;31mArquivo não encontrado.\033[m")
+        print("\033[1;31m❌ Arquivo não encontrado.\033[m")
         return False    
 
 def BuscarNoJsonEmpresas(caminhoDoArquivo):
@@ -222,7 +225,7 @@ def BuscarNoJsonEmpresas(caminhoDoArquivo):
             break  # Sai do loop, pois a empresa foi encontrada
     
     if not empresaEncontrada:
-        print("\033[1;31mEmpresa não foi encontrada. Verifique se digitou o nome corretamente.\033[m")
+        print("\033[1;31m❌ Empresa não foi encontrada. Verifique se digitou o nome corretamente.\033[m")
         return False
     
     return True
@@ -232,9 +235,9 @@ def BuscarNoJsonEmpresas(caminhoDoArquivo):
 def SistemaEmpresas():
     while True:
         Limpar_Console()
-        print("\033[0;36m=\033[m" * 40)
-        print(f"\033[1;35m{'MÓDULO DE CADASTRO DE EMPRESAS':^40}\033[m")
-        print("\033[0;36m=\033[m" * 40)
+        print("\033[0;36m=\033[m" * 50)
+        print(f"\033[1;35m{'✩░▒▓▆▅▃▂▁MÓDULO DE CADASTRO DE EMPRESAS▁▂▃▅▆▓▒░✩':^50}\033[m")
+        print("\033[0;36m=\033[m" * 50)
         print("1 - Cadastrar Empresa")
         print("2 - Visualizar Empresas")
         print("3 - Atualizar Empresa")
@@ -242,7 +245,7 @@ def SistemaEmpresas():
         print("5 - Buscar Empresa")
         print("6 - Voltar para o Menu Principal")
         print("0 - Encerrar o Programa")
-        print("\033[0;36m=\033[m" * 40)
+        print("\033[0;36m=\033[m" * 50)
 
         opc = int(input("\n\033[0;34m➤  Selecione uma opção:\033[m "))
         match(opc):
@@ -272,7 +275,7 @@ def SistemaEmpresas():
                 
                 # Salva a empresa no JSON
                 CadastrarNoJson(arquivoEmpresas, empresa)
-                print("\033[1;32mEmpresa cadastrada com sucesso!\033[m")
+                print("\033[1;32m✅ Empresa cadastrada com sucesso!\033[m")
             case 2:
                 Limpar_Console()
                 VisualizarJsonEmpresas(arquivoEmpresas)
@@ -309,6 +312,8 @@ def SistemaEmpresas():
             case 5:
                 BuscarNoJsonEmpresas(arquivoEmpresas)
             case 6:
+                print("\n\033[1;36mVoltando para o menu principal...\033[m")
+                time.sleep(2)
                 MenuPrincipal()
                 return
             case 0:
@@ -316,7 +321,7 @@ def SistemaEmpresas():
                 return False
             case _:
                 Limpar_Console()
-                print("\033[1;31mOpção inválida! Você voltará para o Menu.\033[m")
+                print("\033[1;31m❌ Opção inválida! Você voltará para o Menu.\033[m")
                 print("-" * 10)
                 continue
 
@@ -343,7 +348,10 @@ def Obter_Prox_Id_Vaga():
 
 def cadastrar_vaga():
     Limpar_Console()
-    print("Cadastro de Vaga")
+    print("\033[0;36m-\033[m" * 70)
+    print(f'\033[1;35m{"CADASTRAR NOVA VAGA":^60}\033[m')
+    print("\033[0;36m-\033[m" * 70)
+    print("")
     
     vaga = {
         "Id": Obter_Prox_Id_Vaga(),
@@ -359,27 +367,30 @@ def cadastrar_vaga():
     }
 
     CadastrarNoJson(arquivoVagas, vaga)
-    print("Vaga cadastrada com sucesso.")
+    print("\033[1;32m✅ Vaga cadastrada com sucesso!\033[m")
 
 def visualizar_vagas():
     Limpar_Console()
-    print("Visualização de Vagas")
+    print("\033[0;36m-\033[m" * 70)
+    print(f'\033[1;35m{"VAGAS CADASTRADAS":^60}\033[m')
+    print("\033[0;36m-\033[m" * 70)
+    print("")
     VisualizarJson(arquivoVagas)
 
 def atualizar_vaga():
     Limpar_Console()
     visualizar_vagas()
-    indice = int(input("Digite o índice da vaga que deseja atualizar: "))
+    indice = int(input("▸ Digite o índice da vaga que deseja atualizar: "))
     if ValidarIndice(arquivoVagas, indice):
-        nova_funcao = input("Digite a nova função (ou deixe em branco para manter a atual): ")
-        novo_curso = input("Digite o novo curso relacionado (ou deixe em branco para manter o atual): ")
-        novo_periodo_minimo = input("Digite o novo período mínimo (ou deixe em branco para manter o atual): ")
-        novo_turno = input("Digite o novo turno (ou deixe em branco para manter o atual): ")
-        nova_bolsa = input("Digite o valor da nova bolsa (ou deixe em branco para manter o atual): ")
-        novo_auxilio_transporte = input("A vaga oferece auxílio transporte? (Sim/Não ou deixe em branco para manter o atual): ")
-        nova_idade_minima = input("Digite a nova idade mínima (ou deixe em branco para manter o atual): ")
-        novo_status = input("Digite o novo status da vaga (ou deixe em branco para manter o atual): ")
-        novo_prazo = input("Digite o novo prazo para candidatura (ou deixe em branco para manter o atual): ")
+        nova_funcao = input("▸ Digite a nova função (ou deixe em branco para manter a atual): ")
+        novo_curso = input("▸ Digite o novo curso relacionado (ou deixe em branco para manter o atual): ")
+        novo_periodo_minimo = input("▸ Digite o novo período mínimo (ou deixe em branco para manter o atual): ")
+        novo_turno = input("▸ Digite o novo turno (ou deixe em branco para manter o atual): ")
+        nova_bolsa = input("▸ Digite o valor da nova bolsa (ou deixe em branco para manter o atual): ")
+        novo_auxilio_transporte = input("▸ A vaga oferece auxílio transporte? (Sim/Não ou deixe em branco para manter o atual): ")
+        nova_idade_minima = input("▸ Digite a nova idade mínima (ou deixe em branco para manter o atual): ")
+        novo_status = input("▸ Digite o novo status da vaga (ou deixe em branco para manter o atual): ")
+        novo_prazo = input("▸ Digite o novo prazo para candidatura (ou deixe em branco para manter o atual): ")
 
         novosDados = {
             "Funcao": nova_funcao,
@@ -396,16 +407,22 @@ def atualizar_vaga():
 
 def deletar_vaga():
     Limpar_Console()
+    print("\033[0;36m-\033[m" * 70)
+    print(f'\033[1;35m{"DELETAR VAGA":^60}\033[m')
+    print("\033[0;36m-\033[m" * 70)
+    print("")
     visualizar_vagas()
-    id = int(input("Digite o ID da vaga que deseja deletar: "))
+    id = int(input("▸ Digite o ID da vaga que deseja deletar: "))
 
     DeletarNoJson(arquivoVagas, id)
 
 def BuscarNoJsonVagas(caminhoDoArquivo):
     Limpar_Console()
     dicionariosModelos = LerArquivo(caminhoDoArquivo)
-    print("VAGAS CADASTRADAS NO SISTEMA")
-    print("-"*40)
+    print("\033[0;36m-\033[m" * 70)
+    print(f'\033[1;35m{"VAGAS CADASTRADAS NO SISTEMA":^60}\033[m')
+    print("\033[0;36m-\033[m" * 70)
+    print("")
     
     # Exibindo todos os cursos cadastrados
     cursos = set()  # Usando um set para evitar duplicatas
@@ -414,7 +431,7 @@ def BuscarNoJsonVagas(caminhoDoArquivo):
     print("Cursos disponíveis:", ", ".join(cursos))
     
     # Entrada do curso escolhido
-    cursoEscolhido = input("Digite o nome do curso que deseja visualizar as vagas de estágio: ")
+    cursoEscolhido = input("▸ Digite o nome do curso que deseja visualizar as vagas de estágio: ")
 
     encontrou_vagas = False  # Variável para verificar se encontramos alguma vaga para o curso
 
@@ -434,7 +451,7 @@ def BuscarNoJsonVagas(caminhoDoArquivo):
     
     # Se não encontrar nenhuma vaga para o curso escolhido
     if not encontrou_vagas:
-        print("Nenhuma vaga encontrada para o curso:", cursoEscolhido)
+        print("\033[1;31m❌ Nenhuma vaga encontrada para o curso:\033[m", cursoEscolhido)
         return False
     
     return True
@@ -443,9 +460,9 @@ def BuscarNoJsonVagas(caminhoDoArquivo):
 def sistema_vagas():
     while True:
         Limpar_Console()
-        print("\n" + "=" * 40)
-        print(f"{'SISTEMA DE VAGAS':^40}")
-        print("=" * 40)
+        print("\033[0;36m=\033[m" * 40)
+        print(f"\033[1;35m{'✩░▒▓▆▅▃▂▁MÓDULO DE VAGAS▁▂▃▅▆▓▒░✩':^40}\033[m")
+        print("\033[0;36m=\033[m" * 40)
         print("1 - Cadastrar Vaga")
         print("2 - Visualizar Vagas")
         print("3 - Atualizar Vaga")
@@ -453,9 +470,9 @@ def sistema_vagas():
         print("5 - Buscar vaga")
         print("6 - Voltar para o Menu Principal")
         print("0 - Encerrar o Programa")
-        print("=" * 40)
+        print("\033[0;36m=\033[m" * 40)
 
-        opc = int(input("\nSelecione uma opção: "))
+        opc = int(input("\n\033[0;34m➤  Selecione uma opcao:\033[m "))
         match opc:
             case 1:
                 cadastrar_vaga()
@@ -468,13 +485,15 @@ def sistema_vagas():
             case 5:
                 BuscarNoJsonVagas(arquivoVagas)
             case 6:
+                print("\n\033[1;36mVoltando para o menu principal...\033[m")
+                time.sleep(2)
                 MenuPrincipal()
                 return
             case 0:
-                print("Finalizando o programa!")
+                print("\033[1;33mFinalizando o programa...\033[m")
                 return False
             case _:
-                print("Opção inválida! Você voltará para o Menu.")
+                print("\033[1;31m❌ Opção inválida! Você voltará para o Menu.\033[m")
                 continue
 
         if not PararOuContinuar():
@@ -482,6 +501,7 @@ def sistema_vagas():
 
 
 # --------------------------------------- !SISTEMA DE ESTUDANTES! ------------------------------------------
+
 def carregar_estudantes():
     # Verifica se o arquivo existe, se não existir, cria um arquivo com lista vazia
     if not os.path.exists(arquivoEstudantes):
@@ -493,11 +513,13 @@ def carregar_estudantes():
         return json.load(f)
 
 def exibir_titulo():
-    print("\033[1;35m✩░▒▓▆▅▃▂▁MÓDULO DOS ESTUDANTES▁▂▃▅▆▓▒░✩\033[m\n")
+    print("\033[0;36m=\033[m" * 45)
+    print(f"\033[1;35m{'✩░▒▓▆▅▃▂▁MÓDULO DOS ESTUDANTES▁▂▃▅▆▓▒░✩':^45}\033[m")
+    print("\033[0;36m=\033[m" * 45)
 
 def exibir_subtitulo(texto):
     Limpar_Console()
-    linha = f'{"*" * 80: ^75}'
+    linha = f'\033[0;36m-\033[m' * 75
     print(linha)
     print(texto)
     print(linha)
@@ -585,7 +607,8 @@ def exibir_menu_estudantes():
     print("3 - Exibir estudantes cadastrados")
     print("4 - Excluir estudante")
     print("5 - Buscar estudante")
-    print("6 - Encerrar")
+    print("6 - Encerrar e voltar ao menu principal")
+    print("\033[0;36m=\033[m" * 45)
     escolher_opcao()
 
 def escolher_opcao():
@@ -630,8 +653,9 @@ def escolher_opcao():
                 break
 
             elif (op == 6):
-                print("\n\033[1;36mEncerrando o programa...\033[m")
-                return False
+                print("\n\033[1;36mVoltando para o menu principal...\033[m")
+                time.sleep(2)
+                MenuPrincipal()
 
             else:
                 print("\n\033[1;33m⚠️  OPÇÃO INVÁLIDA!\033[m")
@@ -649,14 +673,17 @@ def voltar_menu():
 
 def MenuPrincipal():
     Limpar_Console()
-    print("\033[1;35m✩░▒▓▆▅▃▂▁SISTEMA DE VAGAS DE ESTAGIO▁▂▃▅▆▓▒░✩\033[m\n")
-    print("\033[34mBem-vindo(a) ao Centro de Vagas!\n")
+    print("\033[34mBem-vindo(a) ao Centro de Vagas de Estágio!")
     print("\033[34mVamos começar?\033[m\n")
+    time.sleep(1)
+    print("\033[0;36m=\033[m" * 50)
+    print(f'\033[1;35m{"✩░▒▓▆▅▃▂▁SISTEMA DE VAGAS DE ESTAGIO▁▂▃▅▆▓▒░✩":^50}\033[m')
+    print("\033[0;36m=\033[m" * 50)
     print("1 - Sistema de Estudantes")
     print("2 - Sistema de Empresas")
     print("3 - Sistema de Vagas")
     print("0 - Encerrar o programa")
-    
+    print("\033[0;36m=\033[m" * 50)
     opcMenuPrincipal = int(input("\033[34m\n➤  Insira a opção desejada:\033[m "))
     
     match opcMenuPrincipal:
@@ -667,9 +694,11 @@ def MenuPrincipal():
         case 3:
             sistema_vagas()
         case 0:
-            print("Encerrando o programa... Até mais!")
+            print("\033[1;36mEncerrando o programa...")
+            time.sleep(1)
+            print("Até mais!\033[m")
         case _:
-            print("Opção inválida. Sistema encerrado.")
+            print("\033[1;31m❌  Opção inválida. Sistema encerrado.\033[m")
 
 
 # --------------------------------------- !MAIN! ------------------------------------------
