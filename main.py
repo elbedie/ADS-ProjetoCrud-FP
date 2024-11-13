@@ -99,7 +99,11 @@ def AtualizarJson(caminhoDoArquivo, id, novosDados):
     time.sleep(2)
     print("\033[1;32mRegistro atualizado com sucesso!\033[m")
 
-def DeletarNoJson(caminhoDoArquivo, indice):
+import os
+import json
+import time
+
+def DeletarNoJson(caminhoDoArquivo, id):
     if os.path.exists(caminhoDoArquivo):
         with open(caminhoDoArquivo, 'r', encoding="utf8") as arquivo:
             try:
@@ -107,22 +111,29 @@ def DeletarNoJson(caminhoDoArquivo, indice):
             except json.JSONDecodeError:
                 dicionariosModelos = []
 
-        # Verifica se o índice está dentro do intervalo
-        if 1 <= indice <= len(dicionariosModelos):
-            # Remove o registro no índice especificado
-            dicionariosModelos.pop(indice - 1)
+        # Encontra o índice do modelo com o 'Id' correspondente
+        modeloEncontrado = None
+        for modelo in dicionariosModelos:
+            if modelo['Id'] == id:
+                modeloEncontrado = modelo
+                break
+        
+        if modeloEncontrado:
+            # Remove o modelo encontrado
+            dicionariosModelos.remove(modeloEncontrado)
 
             # Salva a lista atualizada no arquivo JSON
-            with open(caminhoDoArquivo, 'w') as arquivo:
+            with open(caminhoDoArquivo, 'w', encoding="utf8") as arquivo:
                 json.dump(dicionariosModelos, arquivo, indent=4, ensure_ascii=False)
 
             print("Removendo registro...")
             time.sleep(2)
             print("\033[1;32mRegistro deletado com sucesso!\033[m")
         else:
-            print("\033[1;31mÍndice inválido.\033[m")
+            print("\033[1;31mO 'Id' especificado não foi encontrado.\033[m")
     else:
         print("\033[1;31mArquivo não encontrado.\033[m")
+
 
 
 
@@ -186,24 +197,36 @@ def VisualizarJsonEmpresas(caminhoDoArquivo):
 def BuscarNoJsonEmpresas(caminhoDoArquivo):
     Limpar_Console()
     dicionariosModelos = LerArquivo(caminhoDoArquivo)
+    
     print("")
     print("\033[0;36m-\033[m" * 70)
     print(f'\033[1;35m{"EMPRESAS CADASTRADAS NO SISTEMA":^75}\033[m')
     print("\033[0;36m-\033[m" * 70)
+    
     for modelo in dicionariosModelos:
         print("[", modelo["Nome"], "]")
+    
     empresaEscolhida = input("\n ▸ Digite o nome da Empresa que deseja visualizar: ")
+    
+    empresaEncontrada = False  # Flag para verificar se a empresa foi encontrada
+    
     for dicionario in dicionariosModelos:
         if 'Nome' in dicionario and str(dicionario['Nome']) == empresaEscolhida:
+            # Empresa encontrada
+            empresaEncontrada = True
             print(f"\nEmpresa: {empresaEscolhida}:")
             print("*******************************")
             for chave, valor in dicionario.items():
                 print(f"{chave.capitalize()}: {valor}")
             print("*******************************")
-            return True
-            
+            break  # Sai do loop, pois a empresa foi encontrada
+    
+    if not empresaEncontrada:
         print("\033[1;31mEmpresa não foi encontrada. Verifique se digitou o nome corretamente.\033[m")
         return False
+    
+    return True
+
     
 
 def SistemaEmpresas():
@@ -323,6 +346,7 @@ def cadastrar_vaga():
     print("Cadastro de Vaga")
     
     vaga = {
+        "Id": Obter_Prox_Id_Vaga(),
         "Funcao": input("Função: "),
         "Curso": input("Curso: "),
         "Periodo Minimo": int(input("Período mínimo: ")),
@@ -346,28 +370,29 @@ def atualizar_vaga():
     Limpar_Console()
     visualizar_vagas()
     indice = int(input("Digite o índice da vaga que deseja atualizar: "))
-    nova_funcao = input("Digite a nova função (ou deixe em branco para manter a atual): ")
-    novo_curso = input("Digite o novo curso relacionado (ou deixe em branco para manter o atual): ")
-    novo_periodo_minimo = input("Digite o novo período mínimo (ou deixe em branco para manter o atual): ")
-    novo_turno = input("Digite o novo turno (ou deixe em branco para manter o atual): ")
-    nova_bolsa = input("Digite o valor da nova bolsa (ou deixe em branco para manter o atual): ")
-    novo_auxilio_transporte = input("A vaga oferece auxílio transporte? (Sim/Não ou deixe em branco para manter o atual): ")
-    nova_idade_minima = input("Digite a nova idade mínima (ou deixe em branco para manter o atual): ")
-    novo_status = input("Digite o novo status da vaga (ou deixe em branco para manter o atual): ")
-    novo_prazo = input("Digite o novo prazo para candidatura (ou deixe em branco para manter o atual): ")
+    if ValidarIndice(arquivoVagas, indice):
+        nova_funcao = input("Digite a nova função (ou deixe em branco para manter a atual): ")
+        novo_curso = input("Digite o novo curso relacionado (ou deixe em branco para manter o atual): ")
+        novo_periodo_minimo = input("Digite o novo período mínimo (ou deixe em branco para manter o atual): ")
+        novo_turno = input("Digite o novo turno (ou deixe em branco para manter o atual): ")
+        nova_bolsa = input("Digite o valor da nova bolsa (ou deixe em branco para manter o atual): ")
+        novo_auxilio_transporte = input("A vaga oferece auxílio transporte? (Sim/Não ou deixe em branco para manter o atual): ")
+        nova_idade_minima = input("Digite a nova idade mínima (ou deixe em branco para manter o atual): ")
+        novo_status = input("Digite o novo status da vaga (ou deixe em branco para manter o atual): ")
+        novo_prazo = input("Digite o novo prazo para candidatura (ou deixe em branco para manter o atual): ")
 
-    novosDados = {
-        "Funcao": nova_funcao,
-        "Curso": novo_curso,
-        "Periodo Minimo": novo_periodo_minimo,
-        "Turno": novo_turno,
-        "Bolsa": nova_bolsa,
-        "Auxilio Transporte": novo_auxilio_transporte,
-        "Idade Minima": nova_idade_minima,
-        "Status": novo_status,
-        "Prazo": novo_prazo
-    }
-    AtualizarJson(arquivoVagas, indice, novosDados)
+        novosDados = {
+            "Funcao": nova_funcao,
+            "Curso": novo_curso,
+            "Periodo Minimo": novo_periodo_minimo,
+            "Turno": novo_turno,
+            "Bolsa": nova_bolsa,
+            "Auxilio Transporte": novo_auxilio_transporte,
+            "Idade Minima": nova_idade_minima,
+            "Status": novo_status,
+            "Prazo": novo_prazo
+        }
+        AtualizarJson(arquivoVagas, indice, novosDados)
 
 def deletar_vaga():
     Limpar_Console()
