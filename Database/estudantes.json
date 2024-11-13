@@ -1,1 +1,8 @@
-[]
+[
+    {
+        "nome": "Pamela",
+        "curso": "ADS",
+        "periodo": 3,
+        "turno": "Noite"
+    }
+]
