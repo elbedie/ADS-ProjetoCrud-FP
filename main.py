@@ -456,33 +456,6 @@ def sistema_vagas():
             break
 
 
-# --------------------------------------- !MENU PRINCIPAL! ------------------------------------------
-
-def MenuPrincipal():
-    Limpar_Console()
-    print("\033[1;35m✩░▒▓▆▅▃▂▁SISTEMA DE VAGAS DE ESTAGIO▁▂▃▅▆▓▒░✩\033[m\n")
-    print("\033[34mBem-vindo(a) ao Centro de Vagas!\n")
-    print("\033[34mVamos começar?\033[m\n")
-    print("1 - Sistema de Estudantes")
-    print("2 - Sistema de Empresas")
-    print("3 - Sistema de Vagas")
-    print("0 - Encerrar o programa")
-    
-    opcMenuPrincipal = int(input("\033[34m\n➤  Insira a opção desejada:\033[m "))
-    
-    match opcMenuPrincipal:
-        case 1:
-            exibir_menu_estudantes()
-        case 2:
-            SistemaEmpresas()
-        case 3:
-            sistema_vagas()
-        case 0:
-            print("Encerrando o programa... Até mais!")
-        case _:
-            print("Opção inválida. Sistema encerrado.")
-
-
 # --------------------------------------- !SISTEMA DE ESTUDANTES! ------------------------------------------
 def carregar_estudantes():
     # Verifica se o arquivo existe, se não existir, cria um arquivo com lista vazia
@@ -495,10 +468,10 @@ def carregar_estudantes():
         return json.load(f)
 
 def exibir_titulo():
-    print("\033[1;35m✩░▒▓▆▅▃▂▁MÓDULO DO ESTUDANTE▁▂▃▅▆▓▒░✩\033[m\n")
+    print("\033[1;35m✩░▒▓▆▅▃▂▁MÓDULO DOS ESTUDANTES▁▂▃▅▆▓▒░✩\033[m\n")
 
 def exibir_subtitulo(texto):
-    os.system("cls")
+    Limpar_Console()
     linha = f'{"*" * 80: ^75}'
     print(linha)
     print(texto)
@@ -580,7 +553,7 @@ def buscar_estudante(nome):
     voltar_menu()
 
 def exibir_menu_estudantes():
-    os.system("cls") #limpar terminal
+    Limpar_Console()
     exibir_titulo()
     print("1 - Cadastrar novo estudante")
     print("2 - Atualizar estudante")
@@ -588,6 +561,7 @@ def exibir_menu_estudantes():
     print("4 - Excluir estudante")
     print("5 - Buscar estudante")
     print("6 - Encerrar")
+    escolher_opcao()
 
 def escolher_opcao():
     while True:
@@ -644,6 +618,33 @@ def escolher_opcao():
 def voltar_menu():
     input("\n\033[0;34m➤  Digite qualquer tecla para voltar ao menu anterior:\033[m ")
     exibir_menu_estudantes()
+
+
+# --------------------------------------- !MENU PRINCIPAL! ------------------------------------------
+
+def MenuPrincipal():
+    Limpar_Console()
+    print("\033[1;35m✩░▒▓▆▅▃▂▁SISTEMA DE VAGAS DE ESTAGIO▁▂▃▅▆▓▒░✩\033[m\n")
+    print("\033[34mBem-vindo(a) ao Centro de Vagas!\n")
+    print("\033[34mVamos começar?\033[m\n")
+    print("1 - Sistema de Estudantes")
+    print("2 - Sistema de Empresas")
+    print("3 - Sistema de Vagas")
+    print("0 - Encerrar o programa")
+    
+    opcMenuPrincipal = int(input("\033[34m\n➤  Insira a opção desejada:\033[m "))
+    
+    match opcMenuPrincipal:
+        case 1:
+            exibir_menu_estudantes()
+        case 2:
+            SistemaEmpresas()
+        case 3:
+            sistema_vagas()
+        case 0:
+            print("Encerrando o programa... Até mais!")
+        case _:
+            print("Opção inválida. Sistema encerrado.")
 
 
 # --------------------------------------- !MAIN! ------------------------------------------
