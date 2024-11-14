@@ -2,12 +2,11 @@ import json
 import os
 import time
 
-# Arquivos JSON
 arquivoEmpresas = "Database/empresas.json"
 arquivoEstudantes = "Database/estudantes.json"
 arquivoVagas = "Database/vagas.json"
 
-# --------------------------------------- FUNÇÕES GLOBAIS ------------------------------------------
+
 
 def Limpar_Console():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -16,7 +15,6 @@ def PararOuContinuar():
     print("")
     while True:
         try:
-            # Tentativa de conversão da entrada para int
             print("\033[0;36m-\033[m" * 70)
             print("\033[1;34m1 - Voltar | 2 - Encerrar o programa")
             opc = int(input("▸ Deseja continuar?\033[m "))
@@ -31,7 +29,6 @@ def PararOuContinuar():
                 print("\033[1;31m❌ Opção inválida. Digite uma opção válida.\033[m")
         
         except ValueError:
-            # Se não for possível converter para int, o ValueError será lançado
             print("\033[1;31m❌ Entrada inválida! Por favor, digite um número inteiro (1 ou 2).\033[m")
 
 
@@ -85,26 +82,19 @@ def VisualizarJson(caminhoDoArquivo):
 
 
 def AtualizarJson(caminhoDoArquivo, id, novosDados):
-    # Ler o arquivo JSON
     dicionariosModelos = LerArquivo(caminhoDoArquivo)
-    # Verificar se o JSON é uma lista e procurar o item com o 'Id' correspondente
     for modelo in dicionariosModelos:
         if modelo['Id'] == id:
             for chave, valor in novosDados.items():
-                if valor:  # Se o valor não for vazio, atualiza
+                if valor:  
                     modelo[chave] = valor
-            break  # Saímos do loop após encontrar o modelo
-    # Salva o registro atualizado no arquivo JSON
+            break  
     with open(caminhoDoArquivo, 'w', encoding="utf8") as arquivo:
         json.dump(dicionariosModelos, arquivo, indent=4, ensure_ascii=False)
 
     print("Atualizando registro...")
     time.sleep(2)
     print("\033[1;32m✅ Registro atualizado com sucesso!\033[m")
-
-import os
-import json
-import time
 
 def DeletarNoJson(caminhoDoArquivo, id):
     if os.path.exists(caminhoDoArquivo):
@@ -114,7 +104,6 @@ def DeletarNoJson(caminhoDoArquivo, id):
             except json.JSONDecodeError:
                 dicionariosModelos = []
 
-        # Encontra o índice do modelo com o 'Id' correspondente
         modeloEncontrado = None
         for modelo in dicionariosModelos:
             if modelo['Id'] == id:
@@ -122,10 +111,8 @@ def DeletarNoJson(caminhoDoArquivo, id):
                 break
         
         if modeloEncontrado:
-            # Remove o modelo encontrado
             dicionariosModelos.remove(modeloEncontrado)
 
-            # Salva a lista atualizada no arquivo JSON
             with open(caminhoDoArquivo, 'w', encoding="utf8") as arquivo:
                 json.dump(dicionariosModelos, arquivo, indent=4, ensure_ascii=False)
 
@@ -139,8 +126,6 @@ def DeletarNoJson(caminhoDoArquivo, id):
 
 
 
-
-# --------------------------------------- !FUNÇÕES DO SISTEMA EMPRESA! ------------------------------------------
 
 def Obter_Prox_Id_Empresa():
     if os.path.exists(arquivoEmpresas):
@@ -163,7 +148,6 @@ def VisualizarJsonEmpresas(caminhoDoArquivo):
                 dicionariosModelos = []
         
         if dicionariosModelos:
-            # Exibir IDs disponíveis
             print("\033[0;36m-\033[m" * 80)
             print(f'\033[1;35m{"EMPRESAS CADASTRADAS":^75}\033[m')
             print("\033[0;36m-\033[m" * 80)
@@ -173,10 +157,8 @@ def VisualizarJsonEmpresas(caminhoDoArquivo):
                     print("ID: " + str(dicionario['Id']).center(10) + " | EMPRESA: " + str(dicionario['Nome']).center(10))
 
 
-            # Solicitar ao usuário o ID da empresa
             id_escolhido = input("\n▸ Digite o ID da empresa que deseja ver os detalhes: ")
 
-            # Encontrar e exibir os detalhes do registro correspondente ao ID escolhido
             for dicionario in dicionariosModelos:
                 if 'Id' in dicionario and str(dicionario['Id']) == id_escolhido:
                     print("")
@@ -211,18 +193,17 @@ def BuscarNoJsonEmpresas(caminhoDoArquivo):
     
     empresaEscolhida = input("\n ▸ Digite o nome da Empresa que deseja visualizar: ")
     
-    empresaEncontrada = False  # Flag para verificar se a empresa foi encontrada
+    empresaEncontrada = False  
     
     for dicionario in dicionariosModelos:
         if 'Nome' in dicionario and str(dicionario['Nome']) == empresaEscolhida:
-            # Empresa encontrada
             empresaEncontrada = True
             print(f"\nEmpresa: {empresaEscolhida}:")
             print("*******************************")
             for chave, valor in dicionario.items():
                 print(f"{chave.capitalize()}: {valor}")
             print("*******************************")
-            break  # Sai do loop, pois a empresa foi encontrada
+            break 
     
     if not empresaEncontrada:
         print("\033[1;31m❌ Empresa não foi encontrada. Verifique se digitou o nome corretamente.\033[m")
@@ -262,7 +243,6 @@ def SistemaEmpresas():
                 empresaTelefone = input("▸ Digite o telefone da Empresa: ")
                 empresaEndereco = input("▸ Digite o endereço da Empresa: ")
                 
-                # Gera o próximo ID automaticamente
                 empresa = {
                     "Id": Obter_Prox_Id_Empresa(),
                     "Nome": empresaNome,
@@ -273,7 +253,6 @@ def SistemaEmpresas():
                     "Endereco": empresaEndereco
                 }
                 
-                # Salva a empresa no JSON
                 CadastrarNoJson(arquivoEmpresas, empresa)
                 print("\033[1;32m✅ Empresa cadastrada com sucesso!\033[m")
             case 2:
@@ -330,7 +309,6 @@ def SistemaEmpresas():
 
 
 
-# --------------------------------------- !SISTEMA DE VAGAS! ------------------------------------------
 
 
 
@@ -424,32 +402,29 @@ def BuscarNoJsonVagas(caminhoDoArquivo):
     print("\033[0;36m-\033[m" * 70)
     print("")
     
-    # Exibindo todos os cursos cadastrados
-    cursos = set()  # Usando um set para evitar duplicatas
+    cursos = set()  
     for modelo in dicionariosModelos:
-        cursos.add(modelo["Curso"])  # Adicionando cursos únicos
+        cursos.add(modelo["Curso"]) 
     print("Cursos disponíveis:", ", ".join(cursos))
     
-    # Entrada do curso escolhido
+    
     cursoEscolhido = input("▸ Digite o nome do curso que deseja visualizar as vagas de estágio: ")
 
-    encontrou_vagas = False  # Variável para verificar se encontramos alguma vaga para o curso
+    encontrou_vagas = False  
 
-    # Buscando vagas para o curso escolhido
+   
     for dicionario in dicionariosModelos:
         if 'Curso' in dicionario and str(dicionario['Curso']) == cursoEscolhido:
             if not encontrou_vagas:
                 print(f"Vagas para o curso de {cursoEscolhido}:")
                 print("*******************************")
             encontrou_vagas = True
-            # Exibe os detalhes da vaga
             print(f"VAGA")
             print("*******************************")
             for chave, valor in dicionario.items():
                 print(f"{chave.capitalize()}: {valor}")
             print("*******************************")
     
-    # Se não encontrar nenhuma vaga para o curso escolhido
     if not encontrou_vagas:
         print("\033[1;31m❌ Nenhuma vaga encontrada para o curso:\033[m", cursoEscolhido)
         return False
@@ -500,15 +475,12 @@ def sistema_vagas():
             break
 
 
-# --------------------------------------- !SISTEMA DE ESTUDANTES! ------------------------------------------
 
 def carregar_estudantes():
-    # Verifica se o arquivo existe, se não existir, cria um arquivo com lista vazia
     if not os.path.exists(arquivoEstudantes):
         with open(arquivoEstudantes, "w") as f:
             json.dump([], f, indent=4)
     
-    # Carrega o conteúdo do arquivo
     with open(arquivoEstudantes, "r") as f:
         return json.load(f)
 
@@ -552,7 +524,7 @@ def atualizar_estudante(nome_antigo, novo_nome, novo_curso, novo_periodo, novo_t
     print("\n\033[1;32m✅ ESTUDANTE ATUALIZADO COM SUCESSO!\033[m")
     voltar_menu()
 
-def exibir_estudantes(): # terminal feiosinho
+def exibir_estudantes(): 
     estudantes = carregar_estudantes()
 
     if estudantes:
@@ -565,7 +537,7 @@ def exibir_estudantes(): # terminal feiosinho
         print("\n\033[1;31m❌ NENHUM ESTUDANTE CADASTRADO!\033[m")
     voltar_menu()
 
-def excluir_estudante(nome): #excluir estudante pelo NOME
+def excluir_estudante(nome): 
     estudantes = carregar_estudantes()
     encontrado = False
 
@@ -594,7 +566,7 @@ def buscar_estudante(nome):
                   " | PERIODO: " + str(estudante["periodo"]).center(14) + 
                   " | TURNO: " + estudante["turno"].center(14))
             encontrado = True
-            break  # sai do loop assim que encontrar o estudante
+            break  
     if not encontrado:
         print("\n\033[1;31m❌ ESTUDANTE NÃO ENCONTRADO.\033[m")
     voltar_menu()
@@ -669,7 +641,7 @@ def voltar_menu():
     exibir_menu_estudantes()
 
 
-# --------------------------------------- !MENU PRINCIPAL! ------------------------------------------
+
 
 def MenuPrincipal():
     Limpar_Console()
@@ -701,7 +673,6 @@ def MenuPrincipal():
             print("\033[1;31m❌  Opção inválida. Sistema encerrado.\033[m")
 
 
-# --------------------------------------- !MAIN! ------------------------------------------
 
 if __name__ == "__main__":
     MenuPrincipal()

@@ -9,15 +9,6 @@
         "Endereco": "Av. Domingos Ferreira"
     },
     {
-        "Id": 3,
-        "Nome": "Saúde+",
-        "Area": "",
-        "Email": "",
-        "Site": "",
-        "Telefone": "66666666",
-        "Endereco": ""
-    },
-    {
         "Id": 5,
         "Nome": "ShowPlus",
         "Area": "",
@@ -25,5 +16,14 @@
         "Site": "",
         "Telefone": "",
         "Endereco": ""
+    },
+    {
+        "Id": 6,
+        "Nome": "BlueTech",
+        "Area": "Tecnologia",
+        "Email": "blue@gmail.com",
+        "Site": "blue.com.br",
+        "Telefone": "81997686574",
+        "Endereco": "Rua do Blue"
     }
 ]

@@ -12,15 +12,9 @@
         "turno": "Noturno"
     },
     {
-        "nome": "Diego",
-        "curso": "ADS",
-        "periodo": 1,
-        "turno": "Noturno"
-    },
-    {
-        "nome": "Kitler",
-        "curso": "Historia",
-        "periodo": 9,
-        "turno": "Matutino"
+        "nome": "Kiki",
+        "curso": "ki",
+        "periodo": 2,
+        "turno": "matutino"
     }
 ]
